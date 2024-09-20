@@ -79,7 +79,13 @@ if cfg.get('teckit', 'env_sensor') == 'bme280':
         ext_pressure = env_sensor.read_pressure() / 100
 elif (cfg.get('teckit', 'env_sensor') == "f1620") and (debug_en == 0):
     thp = imp.load_source('f1620' , 'devices/thp_client.py')              # Load Fluke 1620 support
-    env_sensor = thp.THP_socket(cfg.get('teckit', 'env_1620_ip', 1), int(cfg.get('teckit', 'env_1620_port', 1)) )
+    env_sensor = thp.THP_socket(cfg.get('teckit', 'env_1620_ip'), int(cfg.get('teckit', 'env_1620_port')) )
+    def read_environment():
+        global ext_temp, ext_rh, ext_pressure
+        error, ext_temp, ext_rh, ext_pressure = env_sensor.getTHP()
+elif (cfg.get('teckit', 'env_sensor') == "usbpa") and (debug_en == 0):
+    thp = imp.load_source('usbpa' , 'devices/usb_pa_thp.py')              # Load USBPA support
+    env_sensor = thp.thp_sensor(cfg.get('teckit', 'env_usbpa_port'), 'USBPA')
     def read_environment():
         global ext_temp, ext_rh, ext_pressure
         error, ext_temp, ext_rh, ext_pressure = env_sensor.getTHP()
